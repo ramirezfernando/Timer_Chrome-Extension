@@ -1,0 +1,35 @@
+body {
+  background: #dddddd;
+  margin: 24px;
+}
+
+.timer {
+  font-family: sans-serif;
+  display: inline-block;
+  padding: 24px 32px;
+  border-radius: 30px;
+  background: white;
+}
+
+.container {
+  display: flex;
+}
+
+#set_timer {
+  height: 30px;
+  width: 80px;
+}
+
+#play {
+  height: 30px;
+  width: 80px;
+}
+#pause {
+  height: 30px;
+  width: 80px;
+}
+
+
+
+
+
