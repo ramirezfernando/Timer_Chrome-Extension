@@ -1,5 +1,4 @@
 
-
 body {
   margin: 24px;
   height: 400px;
@@ -10,6 +9,15 @@ body {
   display: flex;
   align-content: center;
   justify-content: center;
+}
+#hours {
+  width: 50px;
+}
+#minutes {
+  width: 50px;
+}
+#seconds {
+  width: 50px;
 }
 
 /* Circle timer countdown */
@@ -71,6 +79,9 @@ body {
 .space {
   height: 30px;
 
+}
+.small_space {
+  height: 5px;
 }
 
 #play {
