@@ -161,7 +161,7 @@ function formatTime(time) { // time = 3361, 1 hr, 1 min, 1 sec
         //minutes = 0;
     }
     
-    
+    // Timer formatting
     if (hours > 0) {
         if (hours < 10) {
             hours = `0${hours}`;
@@ -174,7 +174,6 @@ function formatTime(time) { // time = 3361, 1 hr, 1 min, 1 sec
         }
         return `${hours}:${minutes}:${seconds}`;
     }
-
     if (hours == 0 && minutes > 0) {
         if (minutes < 10) {
             minutes = `0${minutes}`;
@@ -193,7 +192,8 @@ function formatTime(time) { // time = 3361, 1 hr, 1 min, 1 sec
     if (hours == 0 && minutes == 0 && seconds == 0) {
         return `00:00:00`; 
     }
-    
+
+
 }
 
 function setCircleDasharray() {
