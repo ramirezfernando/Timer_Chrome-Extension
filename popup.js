@@ -32,6 +32,8 @@ onSubmit.addEventListener('click', setUserTime);
 
 
 function setUserTime() {
+
+
     let hours = document.getElementById("hours");
     let minutes = document.getElementById("minutes");
     let seconds = document.getElementById("seconds");
@@ -42,8 +44,11 @@ function setUserTime() {
 
     if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
         alert("Enter valid input");
+        document.getElementById("play").disabled = true;
     }
     else {
+        document.getElementById("play").disabled = false;
+
         let test = (hours * 3600) + (minutes * 60) + (seconds % 60);
         alert(test);
         
@@ -86,7 +91,7 @@ const COLOR_CODES = {
   }
 };
 
-const TIME_LIMIT = 3361;
+let TIME_LIMIT = 3661;
 let timePassed = 0;
 let timeLeft = TIME_LIMIT;
 let timerInterval = null;
@@ -133,33 +138,48 @@ function onTimesUp() {
 }
 
 function startTimer() {
-    timerInterval = setInterval(() => {
-        timePassed += 1;
-        timeLeft = TIME_LIMIT - timePassed;
-        document.getElementById("base-timer-label").innerHTML = formatTime(timeLeft); 
-    setCircleDasharray();
-    setRemainingPathColor(timeLeft);
+    let hours = document.getElementById("hours");
+    let minutes = document.getElementById("minutes");
+    let seconds = document.getElementById("seconds");
 
-    if (timeLeft <= 0) {
-    onTimesUp();
+    hours = parseInt(hours.value);
+    minutes = parseInt(minutes.value);
+    seconds = parseInt(seconds.value);
+
+    if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+        alert("Enter valid input");
     }
-}, 1);
+    else {
+        TIME_LIMIT = (hours * 3600) + (minutes * 60) + (seconds % 60);
+        //alert(timeLeft);
+        //document.getElementById("base-timer-label").innerHTML = formatTime(timeLeft); 
+
+
+
+        
+        timerInterval = setInterval(() => {
+            timePassed += 1;
+            timeLeft = TIME_LIMIT - timePassed;
+            document.getElementById("base-timer-label").innerHTML = formatTime(timeLeft); 
+            setCircleDasharray();
+            setRemainingPathColor(timeLeft);
+
+            if (timeLeft <= 0) {
+            onTimesUp();
+            }
+        }, 1000);
+    
+    }
 //1000
 }
   
-function formatTime(time) { // time = 3361, 1 hr, 1 min, 1 sec
+function formatTime(time) { 
+    let hours = Math.floor(time / 3600);
+    let minutes = Math.floor(time / 60) % 60; 
     let seconds = (time % 60); // 1
-    const minutes = Math.floor(time / 60); 
-    const hours = Math.floor(time / 3600);
-    
-    if (seconds > 59) {
-        const minutes = Math.floor(time / 60) + seconds % 60;
-        //seconds = 0;
-    }
-    if (minutes > 59) {
-        const hours = Math.floor(time / 60) + minutes % 60;
-        //minutes = 0;
-    }
+
+    //return `${hours}:${minutes}:${seconds}`;
+
     
     // Timer formatting
     if (hours > 0) {
@@ -181,19 +201,18 @@ function formatTime(time) { // time = 3361, 1 hr, 1 min, 1 sec
         if (seconds < 10) {
             seconds = `0${seconds}`;
         }
-        return `00:${minutes}:${seconds}`;
+        return `${minutes}:${seconds}`;
     }
     if (hours == 0 && minutes == 0 && seconds > 0) {
         if (seconds < 10) {
             seconds = `0${seconds}`;
         }
-        return `00:00:${seconds}`;
+        return `00:${seconds}`;
     }
     if (hours == 0 && minutes == 0 && seconds == 0) {
-        return `00:00:00`; 
+        return `00:0${seconds}`; 
     }
-
-
+    
 }
 
 function setCircleDasharray() {
