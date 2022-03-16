@@ -40,33 +40,34 @@ function setUserTime() {
     minutes = parseInt(minutes.value);
     seconds = parseInt(seconds.value);
 
-    //alert(hours+minutes+seconds);
-    let test = (hours * 3600) + (minutes * 60) + (seconds % 60);
-    alert(test);
-    
-    if (hours < 10) {
-        seconds = `0${seconds}`;
+    if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+        alert("Enter valid input");
+    }
+    else {
+        let test = (hours * 3600) + (minutes * 60) + (seconds % 60);
+        alert(test);
+        
+        if (hours < 10) {
+            hours = `0${hours}`;
         }
-    
-    if (minutes < 10) {
-        minutes = `0${minutes}`;
+        
+        if (minutes < 10) {
+            minutes = `0${minutes}`;
+        }
+        
+        if (seconds < 10) {
+            seconds = `0${seconds}`;
+        }
+        
+        document.getElementById("base-timer-label").innerHTML = `${hours}:${minutes}:${seconds}`;
     }
-    /*
-    if (seconds < 10) {
-        seconds = `0${seconds}`;
-    }
-    */
-    
-
-
-    document.getElementById("base-timer-label").innerHTML = `${hours}:${minutes}:${seconds}`;
 }
 
 
 
 
 
-// -- Once Time is 
+// -- Once Time is inputed
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 10;
 const ALERT_THRESHOLD = 5;
@@ -85,7 +86,7 @@ const COLOR_CODES = {
   }
 };
 
-const TIME_LIMIT = 3661;
+const TIME_LIMIT = 3361;
 let timePassed = 0;
 let timeLeft = TIME_LIMIT;
 let timerInterval = null;
@@ -142,14 +143,15 @@ function startTimer() {
     if (timeLeft <= 0) {
     onTimesUp();
     }
-}, 1000);
+}, 1);
+//1000
 }
   
 function formatTime(time) { // time = 3361, 1 hr, 1 min, 1 sec
     let seconds = (time % 60); // 1
     const minutes = Math.floor(time / 60); 
     const hours = Math.floor(time / 3600);
-
+    
     if (seconds > 59) {
         const minutes = Math.floor(time / 60) + seconds % 60;
         //seconds = 0;
@@ -158,43 +160,41 @@ function formatTime(time) { // time = 3361, 1 hr, 1 min, 1 sec
         const hours = Math.floor(time / 60) + minutes % 60;
         //minutes = 0;
     }
-
-
-    //const minutes = Math.floor(time / 60); // 1666  
-    //const hours = Math.floor(time / 3600); // 27
-  
-    if (hours == 0) {
-        if (minutes < 10) {
-            minutes = `0${minutes}`;
-        }
-        if (seconds < 10) {
-            seconds = `0${seconds}`;
-        }
-        return `${minutes}:${seconds}`;
-    }
-    else if (hours > 0) {
+    
+    
+    if (hours > 0) {
         if (hours < 10) {
-            seconds = `0${seconds}`;
+            hours = `0${hours}`;
             }
         if (minutes < 10) {
             minutes = `0${minutes}`;
         }
         if (seconds < 10) {
-            seconds = `0${minutes}`;
+            seconds = `0${seconds}`;
         }
         return `${hours}:${minutes}:${seconds}`;
     }
 
-    
-    /*
-    if (hours < 10) {
-        hours = `0${hours}`;
+    if (hours == 0 && minutes > 0) {
+        if (minutes < 10) {
+            minutes = `0${minutes}`;
+        }
+        if (seconds < 10) {
+            seconds = `0${seconds}`;
+        }
+        return `00:${minutes}:${seconds}`;
     }
-    */
-
-
-    //return `${hours}:${minutes}:${seconds}`;
-  }
+    if (hours == 0 && minutes == 0 && seconds > 0) {
+        if (seconds < 10) {
+            seconds = `0${seconds}`;
+        }
+        return `00:00:${seconds}`;
+    }
+    if (hours == 0 && minutes == 0 && seconds == 0) {
+        return `00:00:00`; 
+    }
+    
+}
 
 function setCircleDasharray() {
     const circleDasharray = `${(
