@@ -1,3 +1,72 @@
+
+// --- User Input --- //
+
+// Restricts input for the given textbox to the given inputFilter.
+function setInputFilter(textbox, inputFilter) {
+    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+      textbox.addEventListener(event, function() {
+        if (inputFilter(this.value)) {
+          this.oldValue = this.value;
+          this.oldSelectionStart = this.selectionStart;
+          this.oldSelectionEnd = this.selectionEnd;
+        } else if (this.hasOwnProperty("oldValue")) {
+          this.value = this.oldValue;
+          this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+        } else {
+          this.value = "";
+        }
+      });
+    });
+  }
+// Setting filters for hours, minutes, seconds
+setInputFilter(document.getElementById("hours"), function(value) {
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 59); });
+setInputFilter(document.getElementById("minutes"), function(value) {
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 59); });
+setInputFilter(document.getElementById("seconds"), function(value) {
+    return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 59); });
+
+// Onsubmit 
+let onSubmit = document.getElementById("submit");
+onSubmit.addEventListener('click', setUserTime);
+
+
+function setUserTime() {
+    let hours = document.getElementById("hours");
+    let minutes = document.getElementById("minutes");
+    let seconds = document.getElementById("seconds");
+
+    hours = parseInt(hours.value);
+    minutes = parseInt(minutes.value);
+    seconds = parseInt(seconds.value);
+
+    //alert(hours+minutes+seconds);
+    let test = (hours * 3600) + (minutes * 60) + (seconds % 60);
+    alert(test);
+    
+    if (hours < 10) {
+        seconds = `0${seconds}`;
+        }
+    
+    if (minutes < 10) {
+        minutes = `0${minutes}`;
+    }
+    /*
+    if (seconds < 10) {
+        seconds = `0${seconds}`;
+    }
+    */
+    
+
+
+    document.getElementById("base-timer-label").innerHTML = `${hours}:${minutes}:${seconds}`;
+}
+
+
+
+
+
+// -- Once Time is 
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 10;
 const ALERT_THRESHOLD = 5;
@@ -16,31 +85,12 @@ const COLOR_CODES = {
   }
 };
 
-
-// --- User Input --- //
-
-
-hours.oninput = function() {
-    var getNum = hours.value;
-    alert(getNum);
-};
-
-minutes.oninput = function() {
-    alert(hours.value);
-};
-seconds.oninput = function() {
-alert(hours.value);
-};
-
-
-
-
-const TIME_LIMIT = 100000;
+const TIME_LIMIT = 3661;
 let timePassed = 0;
 let timeLeft = TIME_LIMIT;
 let timerInterval = null;
 let remainingPathColor = COLOR_CODES.info.color;
-
+let defaultTime = `00:00:00`;
 document.getElementById("timer").innerHTML = `
     <div class="base-timer">
     <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -58,10 +108,10 @@ document.getElementById("timer").innerHTML = `
             "
         ></path>
         </g>
-    </svg>
-    <span id="base-timer-label" class="base-timer__label">${formatTime(timeLeft)}</span>
+    </svg> 
+    <span id="base-timer-label" class="base-timer__label">${defaultTime}</span>
     </div>
-    `;
+    `; // formatTime(timeLeft)
 
 
 // --- Pause/Play update --- //
@@ -95,27 +145,55 @@ function startTimer() {
 }, 1000);
 }
   
-function formatTime(time) { // time = 100,000
-    const hours = Math.floor(time / 3600); // 27
-    const minutes = Math.floor(time / 60); // 1666
-    let seconds = time % 60; // 40
+function formatTime(time) { // time = 3361, 1 hr, 1 min, 1 sec
+    let seconds = (time % 60); // 1
+    const minutes = Math.floor(time / 60); 
+    const hours = Math.floor(time / 3600);
+
+    if (seconds > 59) {
+        const minutes = Math.floor(time / 60) + seconds % 60;
+        //seconds = 0;
+    }
+    if (minutes > 59) {
+        const hours = Math.floor(time / 60) + minutes % 60;
+        //minutes = 0;
+    }
+
+
+    //const minutes = Math.floor(time / 60); // 1666  
+    //const hours = Math.floor(time / 3600); // 27
   
-    if (seconds < 10) {
-      seconds = `0${seconds}`;
+    if (hours == 0) {
+        if (minutes < 10) {
+            minutes = `0${minutes}`;
+        }
+        if (seconds < 10) {
+            seconds = `0${seconds}`;
+        }
+        return `${minutes}:${seconds}`;
     }
-    if (minutes < 10) {
-        minutes = `0${minutes}`;
+    else if (hours > 0) {
+        if (hours < 10) {
+            seconds = `0${seconds}`;
+            }
+        if (minutes < 10) {
+            minutes = `0${minutes}`;
+        }
+        if (seconds < 10) {
+            seconds = `0${minutes}`;
+        }
+        return `${hours}:${minutes}:${seconds}`;
     }
+
+    
+    /*
     if (hours < 10) {
         hours = `0${hours}`;
     }
+    */
 
 
-
-
-
-    
-    return `${hours}:${minutes}:${seconds}`;
+    //return `${hours}:${minutes}:${seconds}`;
   }
 
 function setCircleDasharray() {
